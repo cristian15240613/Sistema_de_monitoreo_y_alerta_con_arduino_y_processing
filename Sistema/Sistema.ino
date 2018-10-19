@@ -1,8 +1,6 @@
 #include <Wire.h> 
 #include <LiquidCrystal_I2C.h>
 
-int led = 3;
-
 //Crear el objeto lcd  dirección  0x3F y 16 columnas x 2 filas
 
 LiquidCrystal_I2C lcd(0x3F,16,2);
@@ -23,29 +21,36 @@ void setup() {
   
   //Encender la luz de fondo.
   lcd.backlight();
-  
+
+  lcd.print("Hola");
+  /*
   // Escribimos el Mensaje en el LCD.
   lcd.print("Hola Mundo");
-
+  */
 }
 
 void loop() {
      // Ubicamos el cursor en la primera posición(columna:0) de la segunda línea(fila:1)
-  lcd.setCursor(0, 1);
+/*  lcd.setCursor(0, 1);
    // Escribimos el número de segundos trascurridos
   lcd.print(millis()/1000);
   lcd.print(" Segundos");
   
   delay(100);
- 
-  if(Serial.available()>0)//Si el Arduino recibe datos a través del puerto serie
-  {
-    byte dato = Serial.read(); //Los almacena en la variable "dato"
-    lcd.setCursor(0,0);
-    lcd.print(dato);
-  }
+*/
+  lcd.setCursor(0,1);
 
-  colorRGB(255, 135, 0); 
+
+ if(Serial.available()){
+  lcd.clear();
+  
+  while(Serial.available() > 0 ){
+    lcd.write(Serial.read());
+  }
+  
+
+  // colorRGB(255, 135, 0); 
+}
 }
 
 void colorRGB (int r, int v, int a){
