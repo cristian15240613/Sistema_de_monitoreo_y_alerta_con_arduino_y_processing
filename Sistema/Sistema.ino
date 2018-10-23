@@ -23,6 +23,8 @@ void loop() {
   if (Serial.available()) {   // Si hay actividad en el puerto serial
 
     while (Serial.available() > 0 ) {     // Si hay algun mensaje en el puerto serial
+      lcd.clear();                        // Limpiamos el mensaje inicial
+      
       String textoSerie = Serial.readString();                        // Texto recibido por el puerto serial
       int tamaTexto = textoSerie.length();                            // Tamaño de todo el texto
       

@@ -78,7 +78,7 @@ void setup() {
   elementos(espacio, "BIENVENIDOS", cantElementos);
 
   //println(Serial.list());
-  //port = new Serial(this, Serial.list()[0], 9600);
+  port = new Serial(this, Serial.list()[0], 9600);
 }
 
 void draw() {
@@ -107,7 +107,7 @@ void draw() {
           campos[i].setColor(color(255,255,255));
           error.setColorValue(0);
           println(campos[i].getText() + obtenerFechaHora());          
-          //port.write(campos[i].getText() + obtenerFechaHora());
+          port.write(campos[i].getText() + obtenerFechaHora());
           delay(500);
         }else{
           campos[i].setColor(color(255,0,0));
