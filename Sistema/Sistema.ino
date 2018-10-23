@@ -1,66 +1,58 @@
-#include <Wire.h> 
-#include <LiquidCrystal_I2C.h>
+#include <Wire.h>               // Librería wire para comunicación de arduino con dispositivos I2C
+#include <LiquidCrystal_I2C.h>  // Librería para controlar el LCD con el dispositivo I2C
 
 //Crear el objeto lcd  dirección  0x3F y 16 columnas x 2 filas
-
-LiquidCrystal_I2C lcd(0x3F,16,2);
-
-int pinR = 13;
-int pinV = 12;
-int pinA = 11;
+LiquidCrystal_I2C lcd(0x3F, 16, 2); //
 
 void setup() {
   Serial.begin(9600);
-  
-  pinMode(pinR, OUTPUT);
-  pinMode(pinV, OUTPUT);
-  pinMode(pinA, OUTPUT);  
 
   // Inicializar el LCD
   lcd.init();
-  
+
   //Encender la luz de fondo.
   lcd.backlight();
 
-  lcd.print("Hola");
-  /*
-  // Escribimos el Mensaje en el LCD.
-  lcd.print("Hola Mundo");
-  */
+  // Escribimos el Mensaje Inicial en el LCD.
+  lcd.print("Espero Mensaje");
+
 }
 
 void loop() {
-     // Ubicamos el cursor en la primera posición(columna:0) de la segunda línea(fila:1)
-/*  lcd.setCursor(0, 1);
-   // Escribimos el número de segundos trascurridos
-  lcd.print(millis()/1000);
-  lcd.print(" Segundos");
-  
-  delay(100);
-*/
-  lcd.setCursor(0,1);
 
+  if (Serial.available()) {   // Si hay actividad en el puerto serial
 
- if(Serial.available()){
-  lcd.clear();
-  
-  while(Serial.available() > 0 ){
-    lcd.write(Serial.read());
+    while (Serial.available() > 0 ) {     // Si hay algun mensaje en el puerto serial
+      String textoSerie = Serial.readString();                        // Texto recibido por el puerto serial
+      int tamaTexto = textoSerie.length();                            // Tamaño de todo el texto
+      
+      String mensajeSerial = textoSerie.substring(0,(tamaTexto-17));  // Solo el mensaje de todo el texto (17 son los caracteres que ocupa la fecha y hora)
+      String textoFechaHora = textoSerie.substring(tamaTexto-17);     // Solo la fecha y hora en que se emitió el mensaje
+      
+      // Mostramos salida del texto por la izquierda
+      for(int i=1; i<=mensajeSerial.length() ; i++){
+        
+        String texto = mensajeSerial.substring(i-1);    // Parte el string quitando un caracter cada vez que hace el ciclo
+ 
+        //Situamos el cursor
+        lcd.setCursor(0, 0);
+ 
+        // Escribimos el texto
+        lcd.print(texto);
+
+        // Poner el cursero de texto en el segundo renglón del LCD
+        lcd.setCursor(0,1);
+        
+        lcd.print(textoFechaHora);
+        
+        // Esperamos
+        delay(300);
+      }
+
+      // Limpiamos la pantalla
+      lcd.clear();
+      // Volvemos a escribir el mensaje inicial
+      lcd.print("Espero Mensaje");
+    }
   }
-  
-
-  // colorRGB(255, 135, 0); 
-}
-}
-
-void colorRGB (int r, int v, int a){
-  #ifdef COMMON_ANODE
-    r = 255 - r;
-    v = 255 - v;
-    a = 255 - a;
-  #endif
-  analogWrite(pinR, r);
-  analogWrite(pinV, v);
-  analogWrite(pinA, a);
-  
 }
