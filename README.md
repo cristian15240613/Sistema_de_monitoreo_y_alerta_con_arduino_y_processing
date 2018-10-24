@@ -25,6 +25,11 @@ Sistemas programables <br>
 * 1 Teclado matricial.
 * 1 Sensor de humedad y temperatura DTH11.
 * 1 Foto-resistencia.
+* 1 Potenciometro 10k.
+* 1 Resistencia 220.
+* 1 Resistencia 330.
+* 1 Resistencia 10k.
+* 1 LED.
 
 ### Software utilizado
 
