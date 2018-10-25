@@ -43,7 +43,9 @@ Sistemas programables <br>
 ## Librerias utilizadas
 
 * LiquidCrystal_I2C
+* LiquidCrystal (Sin dispositivo I2C)
 * Wire.h
+* DHT (para el sensor)
 
 ## Contenido del repositorio
 
