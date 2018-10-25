@@ -1,5 +1,8 @@
-// libreria para senssor DHT
+// Libreria para sensor DHT
 #include <DHT.h>
+
+// Libreria para Display LCD
+#include  <LiquidCrystal.h>
 
  // luminosidad
 #define LUZ 9
@@ -10,25 +13,31 @@ int ldr;
 int SENSOR = 8;
 int temp, humedad;
 
-//id del sensor, se especifica el tipo de sensor a usar, puede ser DHT11 o DHT22
-DHT dht (SENSOR, DHT11); 
+DHT dht (SENSOR, DHT11); //id del sensor. Puede ser DHT11 o DHT22
+
+// Pantalla
+LiquidCrystal lcd(12, 11, 5, 4, 3, 2);  // pantalla
 
 void setup (){
-// Comunicación serial para visualizar valores
-  Serial.begin(9600); 
- 
+  
+  Serial.begin(9600); //Inicia comunicación serial
+
 //luz
   pinMode(LUZ,OUTPUT); //Configurar el pin 3 como una salida de PWM
 
-// Inicia funcion sensor DHT
+// funcion dht
   dht.begin(); 
+
+// función lcd. (numero_columnas, numero_filas)
+  lcd.begin(16, 2);
    
 }
 
 void loop (){
     
-  Luminosidad();
-  HumedadTemperatura();
+  //Luminosidad();  // Al contar con el display lcd los valores se imprimen dentro de ese método
+  //Humedad();
+  Display();  
   
 }
 
@@ -64,11 +73,9 @@ void Luminosidad (){
 
 }
 
-void HumedadTemperatura (){
-  // DHT -> sensor de temperatura y humedad
-  
-  humedad = dht.readHumidity();  // lee humedad
-  temp = dht.readTemperature(); // lee temperatura
+void Humedad (){
+  humedad = dht.readHumidity();  // lee temperatura
+  temp = dht.readTemperature();
 
   Serial.print("Temperatura: ");
   Serial.println(temp);
@@ -79,4 +86,28 @@ void HumedadTemperatura (){
 
   delay(500);
 }
+
+void Display (){
+// Inicia el mensaje al  inicio de la pantalla
+  lcd.home();
+
+// Impresion Lumosidad
+  lcd.print(" Luz:");
+  lcd.print(cant_luz);
+  
+// Impresion Temperatura
+  lcd.print("Temperatura: ");
+  lcd.print(temp);
+  lcd.print("º");
+
+// Impresion Humedad 
+  lcd.setCursor(0,1); // columna 0, renglon 1
+  lcd.print("Hum.:");
+  lcd.print(humedad);
+  lcd.print("%");
+
+  
+}
+
+
 
