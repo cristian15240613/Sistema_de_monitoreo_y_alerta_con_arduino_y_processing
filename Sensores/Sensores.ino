@@ -1,18 +1,35 @@
+// libreria para senssor DHT
+#include <DHT.h>
+
  // luminosidad
 #define LUZ 9
 int cant_luz;
 int ldr;
 
+// Teperatura y humedad
+int SENSOR = 8;
+int temp, humedad;
+
+//id del sensor, se especifica el tipo de sensor a usar, puede ser DHT11 o DHT22
+DHT dht (SENSOR, DHT11); 
+
 void setup (){
+// Comunicación serial para visualizar valores
+  Serial.begin(9600); 
+ 
 //luz
   pinMode(LUZ,OUTPUT); //Configurar el pin 3 como una salida de PWM
+
+// Inicia funcion sensor DHT
+  dht.begin(); 
    
 }
 
 void loop (){
     
   Luminosidad();
-
+  HumedadTemperatura();
+  
 }
 
 void Luminosidad (){
@@ -47,5 +64,19 @@ void Luminosidad (){
 
 }
 
+void HumedadTemperatura (){
+  // DHT -> sensor de temperatura y humedad
+  
+  humedad = dht.readHumidity();  // lee humedad
+  temp = dht.readTemperature(); // lee temperatura
 
+  Serial.print("Temperatura: ");
+  Serial.println(temp);
+
+  Serial.print("Humedad: ");
+  Serial.print(humedad);
+  Serial.println("%");
+
+  delay(500);
 }
+
